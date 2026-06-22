@@ -7,4 +7,5 @@ data/processed/
 data/qdrant_bge/
 data/qdrant_openai/
 data/bm25_index.pkl
+data/feedback/
 .claude/

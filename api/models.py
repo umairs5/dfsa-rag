@@ -32,3 +32,24 @@ class AskResponse(BaseModel):
     cited_rules: list[str]
     citation_check: dict
     retrieved_chunks: list[ChunkInfo]
+    trace_id: str = Field(default="", description="Trace ID for linking feedback to this response")
+
+
+class FeedbackRequest(BaseModel):
+    question: str = Field(..., description="The question that was asked")
+    answer: str = Field(..., description="The answer that was given")
+    rating: int = Field(..., ge=-1, le=1, description="-1 = bad, 0 = neutral, 1 = good")
+    corrected_answer: str | None = Field(
+        default=None,
+        description="If the answer was wrong, what should it have said?",
+    )
+    expected_chunks: list[str] | None = Field(
+        default=None,
+        description="Which chunk_ids should have been retrieved? (for expert users)",
+    )
+    comment: str | None = Field(default=None, description="Free-text feedback")
+
+
+class FeedbackResponse(BaseModel):
+    status: str
+    feedback_id: str

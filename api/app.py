@@ -21,7 +21,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.models import AskRequest, AskResponse, ChunkInfo
+from api.models import AskRequest, AskResponse, ChunkInfo, FeedbackRequest, FeedbackResponse
 from api.tracing import traced_ask, flush as flush_traces
 from generation.llm import GroqClient
 from retrieval.dense import DenseRetriever
@@ -159,4 +159,33 @@ def ask(req: AskRequest):
             )
             for c in result["retrieved_chunks"]
         ],
+        trace_id=result.get("trace_id", ""),
     )
+
+
+@app.post("/feedback", response_model=FeedbackResponse)
+def feedback(req: FeedbackRequest):
+    """Record user feedback on an answer (thumbs up/down + optional correction)."""
+    import uuid
+    from datetime import datetime, timezone
+
+    feedback_dir = DATA_DIR / "feedback"
+    feedback_dir.mkdir(parents=True, exist_ok=True)
+    feedback_path = feedback_dir / "feedback.jsonl"
+
+    feedback_id = str(uuid.uuid4())[:8]
+    entry = {
+        "feedback_id": feedback_id,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "question": req.question,
+        "answer": req.answer,
+        "rating": req.rating,
+        "corrected_answer": req.corrected_answer,
+        "expected_chunks": req.expected_chunks,
+        "comment": req.comment,
+    }
+
+    with open(feedback_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+
+    return FeedbackResponse(status="recorded", feedback_id=feedback_id)

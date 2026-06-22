@@ -14,6 +14,7 @@ instead of the old trace/span methods from v2.
 
 import os
 import time
+import uuid
 
 from dotenv import load_dotenv
 
@@ -138,6 +139,8 @@ def traced_ask(
             },
         )
 
+    trace_id = lf.get_current_trace_id() or str(uuid.uuid4())
+
     return {
         "answer": gen_result["answer"],
         "model": gen_result["model"],
@@ -145,6 +148,7 @@ def traced_ask(
         "citation_check": citation_check,
         "retrieved_chunks": retrieved_chunks,
         "usage": usage,
+        "trace_id": trace_id,
     }
 
 
@@ -162,4 +166,5 @@ def _untraceable_ask(question, retriever, chunk_store, llm, top_k):
         "citation_check": gen_result["citation_check"],
         "retrieved_chunks": retrieved_chunks,
         "usage": gen_result.get("usage", {}),
+        "trace_id": str(uuid.uuid4()),
     }

@@ -209,4 +209,16 @@ eval still runs).
 
 2026-06-22 — GitHub repo: https://github.com/umairs5/dfsa-rag
 
-<!-- Next entries: feedback loop. -->
+2026-06-22 — Feedback loop: POST /feedback endpoint stores thumbs
+up/down + optional corrected_answer + expected_chunks in JSONL.
+promote_feedback.py script filters promotable entries and adds them
+to eval_set.json. Eval set grew from 35 to 36 entries with first
+user feedback.
+
+2026-06-22 — Feedback promotion criteria: entry is promotable if
+(a) rating=-1 with corrected_answer (user corrected a bad answer),
+(b) rating=1 with expected_chunks (user confirmed which chunks matter),
+or (c) both corrected_answer and expected_chunks provided.
+Deduplication by question text prevents duplicates.
+
+<!-- Next entries: system design doc. -->

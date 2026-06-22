@@ -44,7 +44,7 @@ not to hand him a finished artifact. That changes how you should behave:
 - [x] Phase 5: Serving layer (FastAPI + Docker Compose + Qdrant server)
 - [x] Phase 6: Observability (Langfuse tracing, latency/token/cost breakdown)
 - [x] Phase 7: CI/CD regression gate (GitHub Actions, recall + citation thresholds)
-- [ ] Phase 8: Feedback loop (thumbs up/down -> growing eval set)
+- [x] Phase 8: Feedback loop (POST /feedback + promote_feedback.py → growing eval set)
 - [ ] Phase 9: System design doc (tradeoffs made/rejected at each phase)
 
 ## Locked scope (v1 corpus) — DO NOT EXPAND WITHOUT ASKING
