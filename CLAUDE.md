@@ -45,7 +45,7 @@ not to hand him a finished artifact. That changes how you should behave:
 - [x] Phase 6: Observability (Langfuse tracing, latency/token/cost breakdown)
 - [x] Phase 7: CI/CD regression gate (GitHub Actions, recall + citation thresholds)
 - [x] Phase 8: Feedback loop (POST /feedback + promote_feedback.py → growing eval set)
-- [ ] Phase 9: System design doc (tradeoffs made/rejected at each phase)
+- [x] Phase 9: System design doc (DESIGN.md + docs/system-design.md)
 
 ## Locked scope (v1 corpus) — DO NOT EXPAND WITHOUT ASKING
 Not the full DFSA rulebook. Scoped to the **crypto-token regulatory framework**:
