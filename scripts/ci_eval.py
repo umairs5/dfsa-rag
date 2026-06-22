@@ -107,7 +107,14 @@ def step_generation_eval(retriever, chunks):
         chunk_ids = retriever.retrieve(entry["question"], k=5)
         retrieved = [chunk_store[cid] for cid in chunk_ids if cid in chunk_store]
 
-        gen_result = generate_answer(entry["question"], retrieved, llm)
+        try:
+            gen_result = generate_answer(entry["question"], retrieved, llm)
+        except Exception as e:
+            if "rate_limit" in str(e).lower() or "429" in str(e):
+                print(f"\n  Groq rate limit hit at question {i+1}. Scoring with {len(cit_precisions)} questions.")
+                break
+            raise
+
         cp = citation_precision(gen_result["cited_rules"], retrieved)
         cit_precisions.append(cp)
 
@@ -117,8 +124,12 @@ def step_generation_eval(retriever, chunks):
         if i < len(entries) - 1:
             time.sleep(2)
 
+    if not cit_precisions:
+        print("  No generation results (rate limited immediately). Skipping.")
+        return None
+
     mean_cp = statistics.mean(cit_precisions)
-    print(f"\n  Mean citation_precision: {mean_cp:.3f}")
+    print(f"\n  Mean citation_precision: {mean_cp:.3f} ({len(cit_precisions)}/{len(entries)} questions)")
     return mean_cp
 
 
