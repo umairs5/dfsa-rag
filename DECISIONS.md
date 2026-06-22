@@ -193,4 +193,20 @@ opt-in — if LANGFUSE_PUBLIC_KEY is not set, pipeline works normally.
 (start_as_current_observation) instead of v2's trace/span methods.
 Spans use typed observation types: "retriever", "generation", "guardrail".
 
-<!-- Next entries: CI/CD, feedback loop. -->
+2026-06-22 — CI/CD: GitHub Actions workflow (.github/workflows/eval.yml)
+runs on every push/PR to main. Full pipeline: ingest → index (in-memory
+Qdrant) → retrieval eval → generation eval via Groq. Thresholds:
+recall@5 >= 0.85, citation_precision >= 0.90. Fails the build if any
+threshold is missed.
+
+2026-06-22 — CI uses in-memory Qdrant (:memory:) instead of Docker
+Qdrant — simpler for GitHub runners, no docker-compose needed in CI.
+BGE model cached via actions/cache for faster subsequent runs.
+
+2026-06-22 — GROQ_API_KEY stored as GitHub secret, not in repo.
+Generation eval is skipped gracefully if key is missing (retrieval
+eval still runs).
+
+2026-06-22 — GitHub repo: https://github.com/umairs5/dfsa-rag
+
+<!-- Next entries: feedback loop. -->

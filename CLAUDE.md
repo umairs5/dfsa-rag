@@ -43,7 +43,7 @@ not to hand him a finished artifact. That changes how you should behave:
 - [x] Phase 4: Grounded generation (Groq/Llama, citation guardrails, 8B vs 70B eval)
 - [x] Phase 5: Serving layer (FastAPI + Docker Compose + Qdrant server)
 - [x] Phase 6: Observability (Langfuse tracing, latency/token/cost breakdown)
-- [ ] Phase 7: CI/CD regression gate (eval harness wired into GitHub Actions)
+- [x] Phase 7: CI/CD regression gate (GitHub Actions, recall + citation thresholds)
 - [ ] Phase 8: Feedback loop (thumbs up/down -> growing eval set)
 - [ ] Phase 9: System design doc (tradeoffs made/rejected at each phase)
 
